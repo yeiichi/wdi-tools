@@ -36,12 +36,11 @@ else:
     print("Files are ready at", MY_DATA_PATH)
 
 #Create Country list and Indicator list (csv)
-df = pd.read_csv(FILE_PATH)
+df = pd.read_csv(FILE_PATH, usecols=['Country Name', 'Country Code', 'Indicator Name'])
 country_df = df[['Country Name', 'Country Code']].drop_duplicates(subset=['Country Name'])
 country_df.to_csv(os.path.join(MY_DATA_PATH,'country_list.csv'), header=True, index=False)
 indicator_df = df['Indicator Name'].drop_duplicates()
 indicator_df.to_csv(os.path.join(MY_DATA_PATH,'indicator_list.csv'), header=True, index=False)
-year = df.columns
 
 #Available files in the MY_DATA_PATH
 print("\nNow, following files are available at", MY_DATA_PATH)
