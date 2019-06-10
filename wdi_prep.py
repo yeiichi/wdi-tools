@@ -36,11 +36,7 @@ else:
     print("Files are ready at", MY_DATA_PATH)
 
 #Create Country list and Indicator list (csv)
-<<<<<<< HEAD
 df = pd.read_csv(FILE_PATH, usecols=['Country Name', 'Country Code', 'Indicator Name'])
-=======
-df = pd.read_csv(FILE_PATH, usecols=['Country Name', 'Country Code', 'country_list.csv'])
->>>>>>> 4df61a463de5f75dd3088a008245da4d311d777f
 country_df = df[['Country Name', 'Country Code']].drop_duplicates(subset=['Country Name'])
 country_df.to_csv(os.path.join(MY_DATA_PATH,'country_list.csv'), header=True, index=False)
 indicator_df = df['Indicator Name'].drop_duplicates()
