@@ -31,8 +31,18 @@ else:
 #Unpack the downloaded zip
 if not os.path.isfile(FILE_PATH):
     shutil.unpack_archive(ZIP_PATH, MY_DATA_PATH)
-    print("\nFiles have been unpacked into", MY_DATA_PATH)
+    print("Files have been unpacked into", MY_DATA_PATH)
 else:
-    print("\nFiles are ready at", MY_DATA_PATH)
-#List of the unpacked data
+    print("Files are ready at", MY_DATA_PATH)
+
+#Create Country list and Indicator list (csv)
+df = pd.read_csv(FILE_PATH)
+country_df = df[['Country Name', 'Country Code']].drop_duplicates(subset=['Country Name'])
+country_df.to_csv(os.path.join(MY_DATA_PATH,'country_list.csv'), header=True, index=False)
+indicator_df = df['Indicator Name'].drop_duplicates()
+indicator_df.to_csv(os.path.join(MY_DATA_PATH,'indicator_list.csv'), header=True, index=False)
+year = df.columns
+
+#Available files in the MY_DATA_PATH
+print("\nNow, following files are available at", MY_DATA_PATH)
 os.system("ls -lh " + MY_DATA_PATH)
