@@ -23,60 +23,36 @@ if not os.path.isdir(MY_OUTPUT_PATH):
     os.makedirs(MY_OUTPUT_PATH)
 
 #Filter generator
-#Member country list
-#g8 = ["CAN", "FRA", "DEU", "ITA", "JPN", "RUS", "GBR", "USA"]
-#aifta = ["BRN", "KHM", "IND", "IDN", "LAO", "MYS", "MMR", "PHL", "SGP", "THA", "VNM"]
-
-#Function
-#def ctryFltr(ctry_group):
-#    fltd_str = ""
-#    for i in ctry_group:
-#          fltd_str += r"(df['Country Code'] == '{}') | ".format(i)
-#    return fltd_str
+member_country_set = {
+    "g8":["CAN", "DEU", "FRA", "GBR", "ITA", "JPN", "RUS", "USA"],
+    "apt":["BRN", "CHN", "IDN", "JPN", "KHM", "KOR", "LAO", "MMR", "MYS", "PHL", "SGP", "THA", "VNM"],
+    "aifta":["BRN", "IDN", "IND", "KHM", "LAO", "MMR", "MYS", "PHL", "SGP", "THA", "VNM"],
+    "tpp11":["AUS", "BRN", "CAN", "CHL", "JPN", "MEX", "MYS", "NZL", "PER", "SGP", "VNM"],
+    "cptpp":["AUS", "CAN", "JPN", "MEX", "NZL", "SGP", "VNM"]}
 
 #Reads the WDIData.csv, years 2010 and before are skipped.
-df = pd.read_csv(FILE_PATH,
+left_df = pd.read_csv(FILE_PATH,
                 usecols=['Country Name', 'Country Code', 'Indicator Name',
                          '2011','2012','2013','2014','2015','2016','2017','2018'])
 
-#GDP in the G8
-if not os.path.isfile(os.path.join(MY_OUTPUT_PATH,'G8Gdp.csv')):
-    df_G8Gdp = df[
-        (
-        (df['Country Code'] == 'CAN') |
-        (df['Country Code'] == 'FRA') |
-        (df['Country Code'] == 'DEU') |
-        (df['Country Code'] == 'ITA') |
-        (df['Country Code'] == 'JPN') |
-        (df['Country Code'] == 'RUS') |
-        (df['Country Code'] == 'GBR') |
-        (df['Country Code'] == 'CHN') |
-        (df['Country Code'] == 'USA')
-        )
-        &
-        (df['Indicator Name'] == 'GDP (constant 2010 US$)')]
+#Setting augments
+try:
+    myGroup = input("Input a Country group: g8, apt, aifta, tpp11, cptpp >> ")
+except Exception as exc_msg:
+    print("Error!{}".format(exc_msg))
+myIndicator = "GDP (constant 2010 US$)"
+outputFileName = myIndicator + "_" + myGroup + ".csv"
 
-    df_G8Gdp.to_csv(os.path.join(MY_OUTPUT_PATH,'G8Gdp.csv'))
+#Set right DataFrame with target country group and Indicator
+right_df = pd.DataFrame(member_country_set[myGroup], columns=["Country Code"])
+right_df["Indicator Name"] = myIndicator #Add a column for filtering.
 
-#GDP in the AIFTA
-if not os.path.isfile(os.path.join(MY_OUTPUT_PATH,'AiftaGdp')):
-    df_AiftaGdp = df[
-        (
-        (df['Country Code'] == 'BRN') |
-        (df['Country Code'] == 'KHM') |
-        (df['Country Code'] == 'IND') |
-        (df['Country Code'] == 'IDN') |
-        (df['Country Code'] == 'LAO') |
-        (df['Country Code'] == 'MYS') |
-        (df['Country Code'] == 'MMR') |
-        (df['Country Code'] == 'PHL') |
-        (df['Country Code'] == 'SGP') |
-        (df['Country Code'] == 'THA') |
-        (df['Country Code'] == 'VNM')
-        )
-        &
-        (df['Indicator Name'] == 'GDP (constant 2010 US$)')]
+#Merge (inner merge)
+resultant_df = left_df.merge(right_df,
+    left_on=["Country Code", "Indicator Name"], right_on=["Country Code", "Indicator Name"])
 
-    df_AiftaGdp.to_csv(os.path.join(MY_OUTPUT_PATH,'AiftaGdp.csv'))
-
-print("\n*********************************\nAiftaGdp.csv and G8Gdp.csv\nare available at "+MY_OUTPUT_PATH+"\n*********************************")
+#Create an output file.
+resultant_df.to_csv(os.path.join(MY_OUTPUT_PATH, outputFileName))
+print("\n********************************\n" +
+      outputFileName+"\nis available at "+ MY_OUTPUT_PATH +
+      "\n********************************")
