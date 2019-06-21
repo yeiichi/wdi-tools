@@ -30,18 +30,63 @@ member_country_set = {
     "tpp11":["AUS", "BRN", "CAN", "CHL", "JPN", "MEX", "MYS", "NZL", "PER", "SGP", "VNM"],
     "cptpp":["AUS", "CAN", "JPN", "MEX", "NZL", "SGP", "VNM"]}
 
+indicator_set = {
+    "515":"GDP (constant 2010 US$)",
+    "518":"GDP (current US$)",
+    "522":"GDP per capita (constant 2010 US$)",
+    "525":"GDP per capita (current US$)",
+    "543":"GNI (constant 2010 US$)",
+    "546":"GNI (current US$)",
+    "548":"GNI per capita (constant 2010 US$)"}
+
 #Reads the WDIData.csv, years 2010 and before are skipped.
 left_df = pd.read_csv(FILE_PATH,
                 usecols=['Country Name', 'Country Code', 'Indicator Name',
                          '2011','2012','2013','2014','2015','2016','2017','2018'])
 
-#Setting augments
-try:
-    myGroup = input("Input a Country group: g8, apt, aifta, tpp11, cptpp >> ")
-except Exception as exc_msg:
-    print("Error!{}".format(exc_msg))
-myIndicator = "GDP (constant 2010 US$)"
-outputFileName = myIndicator + "_" + myGroup + ".csv"
+#Function: get augments
+def get_augs():
+#Get a country group
+    try:
+        myGroup = input("""Input a Country group: g8, apt, aifta, tpp11 or cptpp")
+        g8:    CAN, DEU, FRA, GBR, ITA, JPN, RUS, USA
+        apt:   BRN, CHN, IDN, JPN, KHM, KOR, LAO, MMR, MYS, PHL, SGP, THA, VNM
+        aifta: BRN, IDN, IND, KHM, LAO, MMR, MYS, PHL, SGP, THA, VNM
+        tpp11: AUS, BRN, CAN, CHL, JPN, MEX, MYS, NZL, PER, SGP, VNM
+        cptpp: AUS, CAN, JPN, MEX, NZL, SGP, VNM\n>> """)
+    except Exception as exc_msg:
+        print("Error!{}".format(exc_msg))
+#Get an indicator number
+    try:
+        myIndicator_code = input("""Input an Indicagor Number:
+        515: GDP (constant 2010 US$)
+        518: GDP (current US$)
+        522: GDP per capita (constant 2010 US$)
+        525: GDP per capita (current US$)
+        543: GNI (constant 2010 US$)
+        546: GNI (current US$)
+        548: GNI per capita (constant 2010 US$)\n>> """)
+    except Exception as exc_msg:
+        print("Error!{}".format(exc_msg))
+    myIndicator = indicator_set[myIndicator_code]
+#Confirm augments
+    flag = True
+    while i:
+        print("\nAre they OK?\n\tYour group:{}\n\t{}\n".format(
+        myGroup, indicator_set[myIndicator_code]))
+        confirmation = input("(y/n/abort) >> ")
+
+        if confirmation.lower() == "abort":
+            os.sys.exit("Aborted!\n")
+        elif not confirmation.lower() in {"y", "yes", "ok"}:
+            get_augs()
+        else: flag = False
+#Confirmed augments
+    outputFileName = myIndicator + "_" + myGroup + ".csv"
+    return myGroup, myIndicator, outputFileName
+
+#Set augments
+myGroup, myIndicator, outputFileName = get_augs()
 
 #Set right DataFrame with target country group and Indicator
 right_df = pd.DataFrame(member_country_set[myGroup], columns=["Country Code"])
@@ -53,6 +98,4 @@ resultant_df = left_df.merge(right_df,
 
 #Create an output file.
 resultant_df.to_csv(os.path.join(MY_OUTPUT_PATH, outputFileName))
-print("\n********************************\n" +
-      outputFileName+"\nis available at "+ MY_OUTPUT_PATH +
-      "\n********************************")
+print("\n {}\n is available at {}\n".format(outputFileName, MY_OUTPUT_PATH))
