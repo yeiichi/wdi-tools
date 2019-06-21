@@ -58,7 +58,7 @@ def get_augs():
         print("Error!{}".format(exc_msg))
 #Get an indicator number
     try:
-        myIndicator_code = input("""Input an Indicagor Number:
+        myIndicator_code = input("""Input an Indicator Number:
         515: GDP (constant 2010 US$)
         518: GDP (current US$)
         522: GDP per capita (constant 2010 US$)
