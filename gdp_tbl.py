@@ -28,8 +28,9 @@ member_country_set = {
     "apt":["BRN", "CHN", "IDN", "JPN", "KHM", "KOR", "LAO", "MMR", "MYS", "PHL", "SGP", "THA", "VNM"],
     "aifta":["BRN", "IDN", "IND", "KHM", "LAO", "MMR", "MYS", "PHL", "SGP", "THA", "VNM"],
     "tpp11":["AUS", "BRN", "CAN", "CHL", "JPN", "MEX", "MYS", "NZL", "PER", "SGP", "VNM"],
-    "cptpp":["AUS", "CAN", "JPN", "MEX", "NZL", "SGP", "VNM"]}
-
+    "cptpp":["AUS", "CAN", "JPN", "MEX", "NZL", "SGP", "VNM"],
+    "all":["BRN", "CAN", "CHL", "CHN", "DEU", "FRA", "GBR", "IDN", "IND", "ITA", "JPN", "KHM",
+            "KOR", "LAO", "MEX", "MMR", "MYS", "NZL", "PER", "PHL", "RUS", "SGP", "THA", "USA", "VNM"]}
 indicator_set = {
     "515":"GDP (constant 2010 US$)",
     "518":"GDP (current US$)",
@@ -48,12 +49,13 @@ left_df = pd.read_csv(FILE_PATH,
 def get_augs():
 #Get a country group
     try:
-        myGroup = input("""Input a Country group: g8, apt, aifta, tpp11 or cptpp")
+        myGroup = input("""Input a Country group: g8, apt, aifta, tpp11, cptpp or all")
         g8:    CAN, DEU, FRA, GBR, ITA, JPN, RUS, USA
         apt:   BRN, CHN, IDN, JPN, KHM, KOR, LAO, MMR, MYS, PHL, SGP, THA, VNM
         aifta: BRN, IDN, IND, KHM, LAO, MMR, MYS, PHL, SGP, THA, VNM
         tpp11: AUS, BRN, CAN, CHL, JPN, MEX, MYS, NZL, PER, SGP, VNM
-        cptpp: AUS, CAN, JPN, MEX, NZL, SGP, VNM\n>> """)
+        cptpp: AUS, CAN, JPN, MEX, NZL, SGP, VNM
+        all:   All of above countries\n>> """)
     except Exception as exc_msg:
         print("Error!{}".format(exc_msg))
 #Get an indicator number
