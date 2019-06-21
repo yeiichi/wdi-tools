@@ -72,8 +72,7 @@ def get_augs():
 #Confirm augments
     flag = True
     while i:
-        print("\nAre they OK?\n\tYour group:{}\n\t{}\n".format(
-        myGroup, indicator_set[myIndicator_code]))
+        print("\nAre they OK?\n\tYour group:{}\n\t{}\n".format(myGroup, myIndicator))
         confirmation = input("(y/n/abort) >> ")
 
         if confirmation.lower() == "abort":
