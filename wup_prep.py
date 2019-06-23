@@ -28,22 +28,16 @@ if not os.path.isfile(FILE_PATH):
 else:
     print(SRC_URL.split("/")[-1], "is ready at", MY_DATA_PATH)
 
-#Unpack the downloaded zip
-#if not os.path.isfile(FILE_PATH):
-#    shutil.unpack_archive(ZIP_PATH, MY_DATA_PATH)
-#    print("Files have been unpacked into", MY_DATA_PATH)
-#else:
-#    print("Files are ready at", MY_DATA_PATH)
-
 cap_LatLong_df = pd.read_excel(FILE_PATH, skiprows=16,
-usecols=['Country or area', 'Capital City', 'Latitude', 'Longitude'])
+usecols=['Country or area', 'Country code', 'Capital City', 'Latitude', 'Longitude'])
+
+#A reference citation added.
+data_Source= {'Country or area':'UNDP, Department of Economic and Social Affairs',
+    'Country code':'World Urbanization Prospects: The 2018 Revision',
+    'Capital City':r'https://population.un.org/wup/Download/Files/WUP2018-F13-Capital_Cities.xls'}
+cap_LatLong_df = cap_LatLong_df.append(data_Source, ignore_index = True)
+
 cap_LatLong_df.to_csv(os.path.join(MY_DATA_PATH,'cap_LatLong.csv'), header=True, index=False)
-
-#country_df = df[['Country Name', 'Country Code']].drop_duplicates(subset=['Country Name'])
-#country_df.to_csv(os.path.join(MY_DATA_PATH,'country_list.csv'), header=True, index=False)
-#indicator_df = df['Indicator Name'].drop_duplicates()
-#indicator_df.to_csv(os.path.join(MY_DATA_PATH,'indicator_list.csv'), header=True, index=False)
-
 #Available files in the MY_DATA_PATH
 print("\nNow, following files are available at", MY_DATA_PATH)
 os.system("ls -lh " + MY_DATA_PATH)
