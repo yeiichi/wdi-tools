@@ -24,13 +24,25 @@ if not os.path.isdir(MY_OUTPUT_PATH):
 
 #Filter generator
 member_country_set = {
-    "g8":["CAN", "DEU", "FRA", "GBR", "ITA", "JPN", "RUS", "USA"],
-    "apt":["BRN", "CHN", "IDN", "JPN", "KHM", "KOR", "LAO", "MMR", "MYS", "PHL", "SGP", "THA", "VNM"],
     "aifta":["BRN", "IDN", "IND", "KHM", "LAO", "MMR", "MYS", "PHL", "SGP", "THA", "VNM"],
+    "apt":["BRN", "CHN", "IDN", "JPN", "KHM", "KOR", "LAO", "MMR", "MYS", "PHL", "SGP", "THA", "VNM"],
+    "g8":["CAN", "DEU", "FRA", "GBR", "ITA", "JPN", "RUS", "USA"],
+    "gcc":["ARE","BHR","KWT","OMN","QAT","SAU"],
+    "mercosur":["ARG","BOL","BRA","PRY","URY","VEN"],
     "tpp11":["AUS", "BRN", "CAN", "CHL", "JPN", "MEX", "MYS", "NZL", "PER", "SGP", "VNM"],
     "cptpp":["AUS", "CAN", "JPN", "MEX", "NZL", "SGP", "VNM"],
-    "all":["BRN", "CAN", "CHL", "CHN", "DEU", "FRA", "GBR", "IDN", "IND", "ITA", "JPN", "KHM",
-            "KOR", "LAO", "MEX", "MMR", "MYS", "NZL", "PER", "PHL", "RUS", "SGP", "THA", "USA", "VNM"]}
+    "all":["ARE", "ARG", "AUS", "BHR", "BOL", "BRA", "BRN", "CAN", "CHL", "CHN", "DEU", "FRA", "GBR",
+            "IDN", "IND", "ITA", "JPN", "KHM", "KOR", "KWT", "LAO", "MEX", "MMR", "MYS", "NZL", "OMN",
+            "PER", "PHL", "PRY", "QAT", "RUS", "SAU", "SGP", "THA", "URY", "USA", "VEN", "VNM"],
+    "au":["AGO", "BDI", "BEN", "BFA", "BWA", "CAF", "CIV", "CMR", "COD", "COG", "COM", "CPV", "DJI",
+            "DZA", "EGY", "ERI", "ETH", "GAB", "GHA", "GIN", "GMB", "GNB", "GNQ", "KEN", "LBR", "LBY",
+            "LSO", "MAR", "MDG", "MLI", "MOZ", "MRT", "MUS", "MWI", "NAM", "NER", "NGA", "RWA", "SDN",
+            "SEN", "SLE", "SOM", "SSD", "STP", "SWZ", "SYC", "TCD", "TGO", "TUN", "TZA", "UGA", "ZAF",
+            "ZMB", "ZWE", "AAA"],
+    "oecd":["AUS", "AUT", "BEL", "CAN", "CHE", "CHL", "CZE", "DEU", "DNK", "ESP", "EST", "FIN", "FRA",
+            "GBR", "GRC", "HUN", "IRL", "ISL", "ISR", "ITA", "JPN", "KOR", "LTU", "LUX", "LVA", "MEX",
+            "NLD", "NOR", "NZL", "POL", "PRT", "SVK", "SVN", "SWE", "TUR", "USA"]}
+
 indicator_set = {
     "515":"GDP (constant 2010 US$)",
     "518":"GDP (current US$)",
@@ -49,13 +61,17 @@ left_df = pd.read_csv(FILE_PATH,
 def get_augs():
 #Get a country group
     try:
-        myGroup = input("""Input a Country group: g8, apt, aifta, tpp11, cptpp or all")
-        g8:    CAN, DEU, FRA, GBR, ITA, JPN, RUS, USA
-        apt:   BRN, CHN, IDN, JPN, KHM, KOR, LAO, MMR, MYS, PHL, SGP, THA, VNM
+        myGroup = input("""Input a Country group: aifta, apt, g8, etc.")
         aifta: BRN, IDN, IND, KHM, LAO, MMR, MYS, PHL, SGP, THA, VNM
+        apt:   BRN, CHN, IDN, JPN, KHM, KOR, LAO, MMR, MYS, PHL, SGP, THA, VNM
+        g8:    CAN, DEU, FRA, GBR, ITA, JPN, RUS, USA
+        gcc:   ARE, BHR, KWT, OMN, QAT, SAU
+        mercosur: ARG, BOL, BRA, PRY, URY, VEN
         tpp11: AUS, BRN, CAN, CHL, JPN, MEX, MYS, NZL, PER, SGP, VNM
         cptpp: AUS, CAN, JPN, MEX, NZL, SGP, VNM
-        all:   All of above countries\n>> """)
+        all:   All of above countries
+        au:    African Union member countries
+        oecd:  OECD member countries\n>> """)
     except Exception as exc_msg:
         print("Error!{}".format(exc_msg))
 #Get an indicator number
@@ -95,7 +111,8 @@ right_df["Indicator Name"] = myIndicator #Add a column for filtering.
 
 #Merge (inner merge)
 resultant_df = left_df.merge(right_df,
-    left_on=["Country Code", "Indicator Name"], right_on=["Country Code", "Indicator Name"])
+    left_on=["Country Code", "Indicator Name"],
+    right_on=["Country Code", "Indicator Name"]).fillna("NaN")
 
 #Create an output file.
 resultant_df.to_csv(os.path.join(MY_OUTPUT_PATH, outputFileName))
