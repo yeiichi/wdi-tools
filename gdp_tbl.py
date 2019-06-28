@@ -39,6 +39,11 @@ member_country_set = {
             "LSO", "MAR", "MDG", "MLI", "MOZ", "MRT", "MUS", "MWI", "NAM", "NER", "NGA", "RWA", "SDN",
             "SEN", "SLE", "SOM", "SSD", "STP", "SWZ", "SYC", "TCD", "TGO", "TUN", "TZA", "UGA", "ZAF",
             "ZMB", "ZWE", "AAA"],
+    "eu28":["AUT", "BEL", "BGR", "CYP", "CZE", "DEU", "DNK", "ESP", "EST", "FIN", "FRA", "GBR", "GRC",
+            "HRV", "HUN", "IRL", "ITA", "LTU", "LUX", "LVA", "MLT", "NLD", "POL", "PRT", "ROU", "SVK",
+            "SVN", "SWE"],
+    "g20":["ARG", "AUS", "BRA", "CAN", "CHN", "FRA", "DEU", "IND", "IDN", "ITA", "JPN", "KOR", "MEX",
+           "RUS", "SAU", "ZAF", "TUR", "GBR", "USA"],
     "oecd":["AUS", "AUT", "BEL", "CAN", "CHE", "CHL", "CZE", "DEU", "DNK", "ESP", "EST", "FIN", "FRA",
             "GBR", "GRC", "HUN", "IRL", "ISL", "ISR", "ITA", "JPN", "KOR", "LTU", "LUX", "LVA", "MEX",
             "NLD", "NOR", "NZL", "POL", "PRT", "SVK", "SVN", "SWE", "TUR", "USA"]}
@@ -71,6 +76,8 @@ def get_augs():
         cptpp: AUS, CAN, JPN, MEX, NZL, SGP, VNM
         all:   All of above countries
         au:    African Union member countries
+        eu28:  EU28 member countries
+        g20:   G20 member countries (excl.EU, incl.DEU, FRA, GBR, ITA)
         oecd:  OECD member countries\n>> """)
     except Exception as exc_msg:
         print("Error!{}".format(exc_msg))
